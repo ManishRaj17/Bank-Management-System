@@ -3,15 +3,13 @@ import pickle
 import pathlib
 
 # account class
-
-
 class Account:
     acc_number = 0
     holder_name = ''
     deposit = 0
     type = ''
-    # here we creating new Account
 
+    # here we creating new Account
     def createAccount(self):
         self.acc_number = int(input('Account number : '))
         self.holder_name = input('Holder Name : ')
@@ -22,8 +20,6 @@ class Account:
 # end of account class
 
 # for creating new account
-
-
 def newAccount():
     account = Account()
     account.createAccount()
@@ -90,8 +86,6 @@ def accountList():
         print('No data...')
 
 # basically this function is for creating text file
-
-
 def writeAccount(account):
     file = pathlib.Path('account.data')
 
@@ -109,8 +103,6 @@ def writeAccount(account):
     os.rename('newAccount.data', 'account.data')
 
 # starting of the code
-
-
 def into():
     print('********Welcome*********')
     print('****Bank of Horseman****')
