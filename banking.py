@@ -3,6 +3,8 @@ import pickle
 import pathlib
 
 # account class
+
+
 class Account:
     acc_number = 0
     holder_name = ''
@@ -20,12 +22,16 @@ class Account:
 # end of account class
 
 # for creating new account
+
+
 def newAccount():
     account = Account()
     account.createAccount()
     writeAccount(account)
 
 # Balance enquirey
+
+
 def accountinfo(num):
     file = pathlib.Path('account.data')
 
@@ -43,8 +49,8 @@ def accountinfo(num):
         else:
             print('No data for this account number😥')
 
-# deposit amount
-def depositAmount(num):
+# deposit and withdrawl amount
+def depositWithdrawlAmount(num, target):
     file = pathlib.Path('account.data')
 
     if file.exists():
@@ -52,21 +58,37 @@ def depositAmount(num):
         dataList = pickle.load(openFile)
         openFile.close()
         os.remove('account.data')
-
-        for acc in dataList:
-            if(acc.acc_number == num):
-                amountDeposit = int(input("Deposit amount : "))
-                acc.deposit += amountDeposit
-                print('Deposited successfully...')
+        found = False
+        for holderList in dataList:
+            if holderList.acc_number == num:
+                found = True
+                if target == 'd':
+                    print("hey {}".format(holderList.holder_name))
+                    depositAmount = int(input('Deposit Amount : '))
+                    holderList.deposit += depositAmount
+                    print('deposit successfully🙋')
+                elif target == 'w':
+                    print("hey {}".format(holderList.holder_name))
+                    withdrawlAmount = int(input('withdrawl amount : '))
+                    if withdrawlAmount > holderList.deposit:
+                        print("You can't withdrawl this amount.")
+                        print("Your currnet balance is {} only".format(holderList.deposit))
+                        break
+                    elif(withdrawlAmount <= holderList.deposit):
+                        holderList.deposit -= withdrawlAmount
+                        print('Your current amount : ', holderList.deposit)
+        if not found:
+            print('Your account is not exist😥')
     else:
-        print('No data....')
+        print('No data found....')
     outFile = open('newAccount.data', "wb")
     pickle.dump(dataList, outFile)
     outFile.close()
-    os.rename('newAccount.data', 'account.data')
-
+    os.rename("newAccount.data", "account.data")
 
 # Account List
+
+
 def accountList():
     file = pathlib.Path('account.data')
 
@@ -86,6 +108,8 @@ def accountList():
         print('No data...')
 
 # basically this function is for creating text file
+
+
 def writeAccount(account):
     file = pathlib.Path('account.data')
 
@@ -103,6 +127,8 @@ def writeAccount(account):
     os.rename('newAccount.data', 'account.data')
 
 # starting of the code
+
+
 def into():
     print('********Welcome*********')
     print('****Bank of Horseman****')
@@ -128,7 +154,10 @@ while(ch != '0'):
         newAccount()
     elif (ch == '2'):
         num = int(input('enter account number : '))
-        depositAmount(num)
+        depositWithdrawlAmount(num, 'd')
+    elif(ch == '3'):
+        num = int(input('enter account number : '))
+        depositWithdrawlAmount(num, 'w')
     elif(ch == '4'):
         num = int(input('enter account number : '))
         accountinfo(num)
