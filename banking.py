@@ -2,9 +2,7 @@ import os
 import pickle
 import pathlib
 
-# account class
-
-
+# Account class
 class Account:
     acc_number = 0
     holder_name = ''
@@ -21,17 +19,13 @@ class Account:
 
 # end of account class
 
-# for creating new account
-
-
+# 1 for creating new account
 def newAccount():
     account = Account()
     account.createAccount()
     writeAccount(account)
 
-# Balance enquirey
-
-
+# 4 Balance enquirey
 def accountinfo(num):
     file = pathlib.Path('account.data')
 
@@ -49,7 +43,7 @@ def accountinfo(num):
         else:
             print('No data for this account number😥')
 
-# deposit and withdrawl amount
+# 2,3 deposit and withdrawl amount
 def depositWithdrawlAmount(num, target):
     file = pathlib.Path('account.data')
 
@@ -86,9 +80,7 @@ def depositWithdrawlAmount(num, target):
     outFile.close()
     os.rename("newAccount.data", "account.data")
 
-# Account List
-
-
+# 5 Account List
 def accountList():
     file = pathlib.Path('account.data')
 
@@ -96,6 +88,9 @@ def accountList():
         openFile = open('account.data', "rb")
         accountList = pickle.load(openFile)
         openFile.close()
+        if accountList == []:
+            print('No data...')
+
         print('-----------Account List------------')
         for accList in accountList:
             print('------------------------------------')
@@ -107,9 +102,31 @@ def accountList():
     else:
         print('No data...')
 
-# basically this function is for creating text file
+# 6 Close Account
+def closeAccount(num):
+    file = pathlib.Path('account.data')
 
+    if file.exists():
+        openFile = open('account.data',"rb")
+        accountList = pickle.load(openFile)
+        openFile.close()
+        os.remove('account.data')
+        newList = []
 
+        for accList in accountList:
+            if accList.acc_number !=num:
+                newList.append(accList)
+            else:
+                print('Your account is deleted..')
+                break
+    else:
+        print('You are not our customer...')
+    outFile = open('newAccount.data',"wb")
+    pickle.dump(newList,outFile)
+    outFile.close()
+    os.rename("newAccount.data","account.data")   
+
+# basically this function is for creating text file(database)
 def writeAccount(account):
     file = pathlib.Path('account.data')
 
@@ -127,14 +144,10 @@ def writeAccount(account):
     os.rename('newAccount.data', 'account.data')
 
 # starting of the code
-
-
 def into():
     print('********Welcome*********')
     print('****Bank of Horseman****')
     print()
-
-
 into()
 
 ch = ''
@@ -146,6 +159,7 @@ while(ch != '0'):
     print('3 : Withdrawl')
     print('4 : Balance Enquirey')
     print('5 : All Account List')
+    print('6 : Close Account')
 
     print('Choose option above....')
     ch = input()
@@ -163,3 +177,6 @@ while(ch != '0'):
         accountinfo(num)
     elif(ch == '5'):
         accountList()
+    elif (ch == '6'):
+        num = int(input('enter the account number : '))
+        closeAccount(num)
